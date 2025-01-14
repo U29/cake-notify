@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  localstack:
+    image: localstack/localstack:3.0
+    container_name: localstack
+    ports:
+      - "4566:4566"
+      - "4510-4559:4510-4559" # Additional ports for Lambda
+    environment:
+      - DEBUG=1
+      - SERVICES=dynamodb,lambda,events
+      - DEFAULT_REGION=ap-northeast-1
+      - DATA_DIR=/tmp/localstack/data
+      - LAMBDA_DOCKER_NETWORK=cake-notify_default
+      - LAMBDA_REMOTE_DOCKER=true
+      - LAMBDA_DOCKER_FLAGS=--network=cake-notify_default
+    volumes:
+      - ./localstack.env:/etc/localstack/conf.d/localstack.env
+      - ./localstack-data:/tmp/localstack/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  terraform:
+    image: hashicorp/terraform:1.5
+    container_name: terraform
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    depends_on:
+      - localstack
+    entrypoint: ["/bin/sh", "-c", "while true; do sleep 1000; done"]

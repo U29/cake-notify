@@ -1,0 +1,19 @@
+# 仮想環境
+venv/
+.venv/
+
+# ビルド成果物
+lambda_function.zip
+package/
+
+# 環境変数
+.env
+localstack.env
+
+# Localstackデータ
+localstack-data/
+
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
