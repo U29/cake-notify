@@ -1,31 +1,28 @@
-version: "3.8"
-
 services:
   localstack:
-    image: localstack/localstack:3.0
+    image: localstack/localstack:latest
     container_name: localstack
     ports:
       - "4566:4566"
-      - "4510-4559:4510-4559" # Additional ports for Lambda
+      - "4510-4559:4510-4559"
     environment:
+      - SERVICES=dynamodb,lambda,events,iam
       - DEBUG=1
-      - SERVICES=dynamodb,lambda,events
-      - DEFAULT_REGION=ap-northeast-1
-      - DATA_DIR=/tmp/localstack/data
-      - LAMBDA_DOCKER_NETWORK=cake-notify_default
-      - LAMBDA_REMOTE_DOCKER=true
-      - LAMBDA_DOCKER_FLAGS=--network=cake-notify_default
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
     volumes:
-      - ./localstack.env:/etc/localstack/conf.d/localstack.env
-      - ./localstack-data:/tmp/localstack/data
-      - /var/run/docker.sock:/var/run/docker.sock
+      - "./localstack-data:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
   terraform:
-    image: hashicorp/terraform:1.5
+    image: hashicorp/terraform:latest
     container_name: terraform
     volumes:
-      - .:/workspace
+      - ./terraform:/workspace
+      - ./lambda:/lambda
     working_dir: /workspace
     depends_on:
       - localstack
-    entrypoint: ["/bin/sh", "-c", "while true; do sleep 1000; done"]
+    entrypoint: ["sleep", "infinity"]
