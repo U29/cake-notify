@@ -1,0 +1,5 @@
+boto3
+discord-webhook
+python-dateutil
+pytest
+moto
