@@ -128,8 +128,10 @@ def test_lambda_handler(dynamodb_table):
     from lambda_function import lambda_handler
 
     # 環境変数を設定
-    os.environ["DYNAMODB_TABLE"] = "birthdays"
-    os.environ["DISCORD_WEBHOOK_URL"] = "https://example.com/"
+    os.environ["DYNAMODB_TABLE"] = os.environ.get("DYNAMODB_TABLE", "birthdays")
+    os.environ["DISCORD_WEBHOOK_URL"] = os.environ.get(
+        "DISCORD_WEBHOOK_URL", "https://example.com"
+    )
 
     # Lambdaハンドラを実行
     result = lambda_handler({}, {})
