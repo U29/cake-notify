@@ -15,8 +15,6 @@ provider "aws" {
 resource "aws_dynamodb_table" "cake_notify" {
   name           = "cake-notify"
   billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 5
-  write_capacity = 5
   hash_key       = "user_id"
   range_key      = "birthday"
 
@@ -36,6 +34,8 @@ resource "aws_lambda_function" "cake_notifier" {
   role          = var.lambda_role_arn
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.12"
+  filename      = "${path.module}/../lambda/lambda_function.zip"
+  source_code_hash = filebase64sha256("${path.module}/../lambda/lambda_function.zip")
 
   environment {
     variables = {
