@@ -3,10 +3,12 @@ import boto3
 from datetime import datetime, timedelta
 from dateutil import parser
 from discord_webhook import DiscordWebhook
+from pytz import timezone
 
 
 def get_dynamodb_table():
     table_name = os.environ.get("DYNAMODB_TABLE", "birthdays")
+    # endpoint_url はローカルでのテスト用。本番ではNoneになる
     endpoint_url = os.environ.get("DYNAMODB_ENDPOINT")
     dynamodb = boto3.resource("dynamodb", endpoint_url=endpoint_url)
     return dynamodb.Table(table_name)
@@ -17,7 +19,8 @@ def get_webhook_url():
 
 
 def get_users_with_upcoming_birthdays():
-    today = datetime.now().date()
+    JST = timezone("Asia/Tokyo")
+    today = datetime.now(JST).date()
     three_days_later = today + timedelta(days=3)
 
     table = get_dynamodb_table()

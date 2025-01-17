@@ -4,6 +4,7 @@ import boto3
 from datetime import datetime, timedelta
 from moto import mock_aws
 from lambda_function import lambda_handler
+from pytz import timezone
 
 
 @pytest.fixture
@@ -30,7 +31,8 @@ def create_test_data(table, days_offset=0):
         table: DynamoDBテーブル
         days_offset: 今日からの日数オフセット（デフォルト0）
     """
-    today = datetime.now().date() + timedelta(days=days_offset)
+    JST = timezone("Asia/Tokyo")
+    today = datetime.now(JST).date() + timedelta(days=days_offset)
     test_data = [
         # 今日の誕生日
         {
