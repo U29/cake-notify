@@ -3,3 +3,4 @@ discord-webhook
 python-dateutil
 pytest
 moto
+pytz

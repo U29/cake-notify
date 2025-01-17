@@ -50,7 +50,7 @@ resource "aws_scheduler_schedule" "cake_notify_daily" {
   group_name          = "cake-notify"
   schedule_expression = "cron(0 0 * * ? *)"
   schedule_expression_timezone = "Asia/Tokyo"
-  state               = "DISABLED"
+  state               = "ENABLED"
 
   flexible_time_window {
     mode = "OFF"
