@@ -40,6 +40,7 @@ resource "aws_lambda_function" "cake_notifier" {
   environment {
     variables = {
       DYNAMODB_TABLE = aws_dynamodb_table.cake_notify.name
+      DISCORD_WEBHOOK_URL = var.discord_webhook_url
     }
   }
 }

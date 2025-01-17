@@ -7,6 +7,7 @@ from discord_webhook import DiscordWebhook
 
 def get_dynamodb_table():
     table_name = os.environ.get("DYNAMODB_TABLE", "birthdays")
+    # endpoint_url はローカルでのテスト用。本番ではNoneになる
     endpoint_url = os.environ.get("DYNAMODB_ENDPOINT")
     dynamodb = boto3.resource("dynamodb", endpoint_url=endpoint_url)
     return dynamodb.Table(table_name)
