@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment:
+      name: test
+    services:
+      localstack:
+        image: localstack/localstack:latest
+        ports:
+          - 4566:4566
+        env:
+          SERVICES: dynamodb
+          DEBUG: 1
+          DATA_DIR: /tmp/localstack/data
+          HEALTHCHECK_CMD: awslocal dynamodb list-tables
+          HEALTHCHECK_INTERVAL: 10s
+          HEALTHCHECK_TIMEOUT: 5s
+          HEALTHCHECK_RETRIES: 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r lambda/requirements.txt
+          pip install pytest moto
+
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id test
+          aws configure set aws_secret_access_key test
+          aws configure set default.region us-east-1
+          aws configure set default.output json
+
+      - name: Create DynamoDB table
+        run: |
+          aws dynamodb create-table \
+            --endpoint-url http://localhost:4566 \
+            --table-name birthdays \
+            --attribute-definitions AttributeName=id,AttributeType=S \
+            --key-schema AttributeName=id,KeyType=HASH \
+            --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
+      - name: Run tests
+        env:
+          DYNAMODB_TABLE: birthdays
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          PYTHONPATH=$PYTHONPATH:$(pwd)/lambda pytest lambda/tests/test_lambda_function.py -v
