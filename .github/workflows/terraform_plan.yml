@@ -25,6 +25,9 @@ jobs:
           terraform_version: "1.5.7"
       - name: Terraform Init
         run: terraform init
+      - name: Zip the code
+        working-directory: lambda
+        run: sh make_zip.sh
       - name: Terraform Plan
         env:
           TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
