@@ -7,6 +7,8 @@ on:
 
 jobs:
   terraform_apply:
+    environment:
+      name: prod
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -17,7 +19,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -33,7 +35,7 @@ jobs:
 
       - name: Terraform Apply
         run: |
-          export TF_VAR_aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}
-          export TF_VAR_aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          export TF_VAR_aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}
+          export TF_VAR_aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           export TF_VAR_aws_region=${{ secrets.AWS_DEFAULT_REGION }}
           terraform apply --auto-approve

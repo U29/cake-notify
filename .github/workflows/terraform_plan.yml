@@ -10,6 +10,8 @@ on:
 
 jobs:
   terraform_plan:
+    environment:
+      name: prod
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,9 +20,9 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: "1.5.7"
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_access_key_id_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws_region: ${{ secrets.AWS_REGION }}
           lambda_role_arn: ${{ secrets.LAMBDA_ROLE_ARN }}
           scheduler_role_arn: ${{ secrets.SCHEDULER_ROLE_ARN }}
           discord_webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
