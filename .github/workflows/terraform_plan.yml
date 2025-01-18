@@ -20,7 +20,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: "1.5.7"
-          aws_access_key_id_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: ${{ secrets.AWS_REGION }}
           lambda_role_arn: ${{ secrets.LAMBDA_ROLE_ARN }}
