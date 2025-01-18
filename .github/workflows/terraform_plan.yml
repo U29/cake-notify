@@ -28,6 +28,8 @@ jobs:
           discord_webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Change directory
         run: cd terraform
+      - name: List files in terraform directory
+        run: ls -la
       - name: Terraform Init
         run: terraform init
       - name: Terraform Plan
