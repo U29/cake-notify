@@ -10,6 +10,7 @@ on:
 
 jobs:
   terraform_plan:
+    needs: test
     environment:
       name: prod
     runs-on: ubuntu-latest
