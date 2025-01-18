@@ -4,9 +4,16 @@ on:
   push:
     branches:
       - main
+  workflow_run:
+    workflows: ["Terraform Plan"]
+    branches:
+      - main
+    types:
+      - completed
 
 jobs:
   terraform_apply:
+    if: github.ref == 'refs/heads/main'
     environment:
       name: prod
     runs-on: ubuntu-latest

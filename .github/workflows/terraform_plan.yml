@@ -7,6 +7,10 @@ on:
   push:
     branches:
       - main
+  workflow_run:
+    workflows: ["Run Pytest"]
+    types:
+      - completed
 
 jobs:
   terraform_plan:
@@ -37,3 +41,19 @@ jobs:
           TF_VAR_scheduler_role_arn: ${{ secrets.SCHEDULER_ROLE_ARN }}
           TF_VAR_discord_webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: terraform plan
+
+      - name: Set output
+        id: set-output
+        run: echo "terraform_plan_status=success" >> $GITHUB_OUTPUT
+
+      - name: Trigger Terraform Apply on main branch
+        if: github.ref == 'refs/heads/main'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'terraform_apply.yml',
+              ref: 'main'
+            })

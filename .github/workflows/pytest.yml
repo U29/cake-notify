@@ -7,6 +7,10 @@ on:
   push:
     branches:
       - main
+  workflow_run:
+    workflows: ["Run Pytest"]
+    types:
+      - completed
 
 jobs:
   test:
@@ -64,3 +68,7 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           PYTHONPATH=$PYTHONPATH:$(pwd)/lambda pytest lambda/tests/test_lambda_function.py -v
+
+      - name: Set output
+        id: set-output
+        run: echo "pytest_status=success" >> $GITHUB_OUTPUT
