@@ -1,11 +1,12 @@
-name: CI
+name: Run Pytest
 
 on:
+  pull_request:
+    branches:
+      - "**"
   push:
     branches:
       - main
-      - develop
-  pull_request:
 
 jobs:
   test:
