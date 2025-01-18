@@ -32,7 +32,7 @@ jobs:
         env:
           TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          TF_VAR_aws_region: ${{ env.AWS_REGION }}
+          TF_VAR_aws_region: ${{ vars.AWS_REGION }}
           TF_VAR_lambda_role_arn: ${{ secrets.LAMBDA_ROLE_ARN }}
           TF_VAR_scheduler_role_arn: ${{ secrets.SCHEDULER_ROLE_ARN }}
           TF_VAR_discord_webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
