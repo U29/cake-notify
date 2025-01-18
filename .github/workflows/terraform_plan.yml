@@ -13,6 +13,9 @@ jobs:
     environment:
       name: prod
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -26,10 +29,6 @@ jobs:
           lambda_role_arn: ${{ secrets.LAMBDA_ROLE_ARN }}
           scheduler_role_arn: ${{ secrets.SCHEDULER_ROLE_ARN }}
           discord_webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-      - name: Change directory
-        run: cd terraform
-      - name: List files in terraform directory
-        run: ls -la
       - name: Terraform Init
         run: terraform init
       - name: Terraform Plan
