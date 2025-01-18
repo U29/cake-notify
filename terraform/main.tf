@@ -8,8 +8,9 @@ terraform {
 }
 
 provider "aws" {
-  region  = "ap-northeast-1"
-  profile = "default"
+  region     = var.aws_region
+  access_key = var.aws_access_key_id
+  secret_key = var.aws_secret_access_key
 }
 
 resource "aws_dynamodb_table" "cake_notify" {
