@@ -25,6 +25,9 @@ jobs:
           terraform_version: "1.5.7"
           terraform_wrapper: false
 
+      - name: Change directory
+        run: cd terraform
+
       - name: Terraform Init
         run: terraform init
 
