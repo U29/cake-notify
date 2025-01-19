@@ -1,4 +1,4 @@
-name: Terraform Plan
+name: Deploy
 
 on:
   workflow_run:
