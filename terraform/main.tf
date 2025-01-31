@@ -41,6 +41,7 @@ resource "aws_lambda_function" "cake_notifier" {
   role             = var.lambda_role_arn
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
+  timeout          = 10
   filename         = "${path.module}/../lambda/lambda_function.zip"
   source_code_hash = filebase64sha256("${path.module}/../lambda/lambda_function.zip")
 
